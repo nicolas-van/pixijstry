@@ -19,6 +19,7 @@ module.exports = function(grunt) {
         "bower_components/spear/spear.js",
         "bower_components/bootstrap/dist/js/bootstrap.js",
         "bower_components/sjoh/sjoh.js",
+        "bower_components/pixi/bin/pixi.dev.js",
     ];
     var templatesfiles = [
         "src/client_templates/templates.html",
