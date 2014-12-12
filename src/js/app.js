@@ -2,7 +2,7 @@
 $(function() {
 "use strict";
 
-    var resolution = [160, 90];
+    var resolution = [960, 540];
     var ar = resolution[0] / resolution[1];
 
     var renderer = PIXI.autoDetectRenderer(resolution[0], resolution[1]);
@@ -38,42 +38,40 @@ $(function() {
     var image = document.createElement("canvas");
 
     (function() {
-        image.width = 64;
-        image.height = 64;
+        image.width = 512;
+        image.height = 512;
         var context = image.getContext('2d');
         var centerX = image.width / 2;
         var centerY = image.height / 2;
         var radius = image.width / 2;
 
-        var iterations = 100;
-
-        _.each(_.range(iterations), function(el) {
-            el = el + 1;
-            context.beginPath();
-            context.arc(centerX, centerY, radius * (1 - (el / iterations)), 0, 2 * Math.PI, false);
-            context.fillStyle = 'rgba(255, 255, 255, ' + ((el / iterations) * 0.05) + ')';
-            context.fill();
-        });
+        context.beginPath();
+        context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+        context.fillStyle = 'rgba(255, 255, 255, 0.5)';
+        context.fill();
     })();
-
-    var container = new PIXI.DisplayObjectContainer();
-    container.position.x = resolution[0] / 2;
-    container.position.y = resolution[1] / 2;
-    stage.addChild(container);
 
     var texture = PIXI.Texture.fromCanvas(image);
     var object = new PIXI.Sprite(texture);
+    object.width = 64;
+    object.height = 64;
     object.anchor.x = 0.5;
     object.anchor.y = 0.5;
-    object.position.x = 10;
-    object.position.y = 0;
-    container.addChild(object);
+    object.turn = 0;
+    stage.addChild(object);
+
+    var last = new Date().getTime() / 1000;
  
     var animate = function() {
-        container.rotation += 0.1;
+        var now = new Date().getTime() / 1000;
+        var deltat = now - last;
+        object.turn += 1 * deltat;
+        object.position.x = resolution[0] / 2 + Math.cos(object.turn) * 100;
+        object.position.y = resolution[1] / 2 + Math.sin(object.turn) * 100;
 
         renderer.render(tstage);
 
+        last = now;
         requestAnimFrame(animate);
     }
     requestAnimFrame(animate);
